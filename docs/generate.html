@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Generate Pruver Link</title>
+	<meta name="author" content="Adam Jones (domdomegg)">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+	<style>
+		body {
+			background: #1F2228;
+			color: #EEF4ED;
+		}
+
+		.purple {
+			color: #F92672;
+			margin-left: 0.15rem;
+			font-size: 100%;
+		}
+
+		code {
+			font-size: 100%;
+		}
+
+		a {
+			color: #4dbdff
+		}
+
+		textarea {
+			word-break: break-all;
+			font-family: monospace;
+		}
+
+		input[readonly], textarea[readonly] {
+			border: none !important;
+			box-shadow: none !important;
+		}
+	</style>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53112287-3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'UA-53112287-3');
+	</script>
+</head>
+
+<body>
+	<!-- <p class="d-block px-3 py-2 text-center" style="background-color:#c24e00;">⚠ This service is in BETA and future breaking changes are likely</p> -->
+	<div class="container">
+		<div class="d-none d-sm-block" style="padding-top: 5rem;"></div>
+		<h1 class="pt-2">🔗 Generate a Pruver link</h1>
+		<h4 class="py-4 lead">You can create a Pruver link here. If you wanted a Pruver code you'll need to go to a Pruver link.</h4>
+		
+		<nav class="py-2">
+			<ul class="list-inline">
+				<li class="list-inline-item">
+					<a class="btn btn-outline-light" href="index.html">Home</a>
+				</li>
+				<li class="list-inline-item">
+					<button type="button" class="btn btn-light">Generate link</button>
+				</li>
+				<li class="list-inline-item">
+					<a class="btn btn-outline-light" href="verify.html">Verify code</a>
+				</li>
+			</ul>
+		</nav>
+
+		<section class="py-2">
+			<form class="pb-4">
+				<h4>📋 We just need a few details from you:</h4>
+
+				<div class="form-group">
+					<label for="reference">Reference</label>
+					<div class="input-group">
+						<input type="text" class="form-control" id="reference" aria-describedby="referenceHelp" placeholder="e.g. DCS SSLC survey #8">
+					</div>
+					<small id="referenceHelp" class="form-text">A reference to identify your survey.</small>
+				</div>
+
+				<div class="form-group">
+					<label for="seed">Random seed</label>
+					<div class="input-group">
+						<input type="text" class="form-control" id="seed" aria-describedby="seedHelp" placeholder="e.g. 1234567">
+						<div class="input-group-append">
+							<button id="seed_random" class="btn btn-outline-light" type="button">Random</button>
+						</div>
+					</div>
+					<small id="seedHelp" class="form-text">You'll need to remember this to verify codes later. If you don't know what value to put here, just leave the default. It prevents someone reusing someone else's code for a later survey with the same reference, and to detect duplicate responses. A different seed will result in a different <code>uniqueid</code> for the same user.</small>
+				</div>
+
+				<!-- NB: you can generate these with tools/generatecheckboxes.js -->
+				<div id="requestedProperties">
+					<label>What data would you like to get?</label>
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" id="uniqueId" checked>
+						<label class="custom-control-label" for="uniqueId"><code>uniqueId</code>: Proof that someone is a unique person for a given reference.</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="student">
+							<label class="custom-control-label" for="student"><code>student</code>: Whether someone is a student, "true" or "false".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="staff">
+							<label class="custom-control-label" for="staff"><code>staff</code>: Whether someone is a staff member, "true" or "false".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="group">
+							<label class="custom-control-label" for="group"><code>group</code>: Group, e.g. "Undergraduate - full-time".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="dept">
+							<label class="custom-control-label" for="dept"><code>dept</code>: Department, e.g. "Computer Science".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="year">
+							<label class="custom-control-label" for="year"><code>year</code>: Year of study, e.g. "2".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="course">
+							<label class="custom-control-label" for="course"><code>course</code>: Course code, e.g. "UCSA-G503".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="id">
+							<label class="custom-control-label" for="id"><code>id</code>: University ID, e.g. "1802249".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="user">
+							<label class="custom-control-label" for="user"><code>user</code>: Username (usually their ID prepended with a 'u'), e.g. "u1802249".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="firstName">
+							<label class="custom-control-label" for="firstName"><code>firstName</code>: First name, e.g. "Adam".</label>
+					</div>
+					<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input" id="lastName">
+							<label class="custom-control-label" for="lastName"><code>lastName</code>: Last name, e.g. "Jones".</label>
+					</div>
+				</div>
+			</form>
+
+			<div id="result" style="display: none">
+				<h4>👍 Nice, now share this link:</h4>
+
+				<div class="input-group mt-3 mb-1">
+					<input id="generatedLink" class="form-control" type="text" value="Uh oh if you can see this something's not right" readonly>
+					<div class="input-group-append">
+						<button id="generatedLink_copy" class="btn btn-outline-light" type="button">Copy</button>
+						<a href="" id="generatedLink_try" class="btn btn-outline-light" target="_blank" rel="noopener">Try out</a>
+					</div>
+				</div>
+				<p>Want something shorter? You can plug it into <a href="https://bit.ly" target="_blank" rel="noopener">bit.ly</a> or <a href="https://tinyurl.com/" target="_blank" rel="noopener">tinyurl.com</a> before sharing it.</p>
+			</div>
+		</section>
+	</div>
+	<script type="text/javascript">
+		// const baseUrl = 'https://aremv91mea.execute-api.eu-west-1.amazonaws.com/dev';
+		const baseUrl = 'https://0vv4hbzikb.execute-api.eu-west-1.amazonaws.com/prod';
+
+		const updateLink = () => {
+			const reference = document.getElementById('reference').value;
+			const seed = document.getElementById('seed').value;
+			const properties = [...document.querySelectorAll('input[type=checkbox]:checked')].map(input => input.id);
+
+			if (!reference || !seed || !properties.length) {
+				document.getElementById('result').style.display = 'none';
+				return;
+			}
+
+			const url = `${baseUrl}/warwick-sso/authorise?requested_properties=${encodeURIComponent(properties.join(','))}&reference=${encodeURIComponent(reference)}&seed=${encodeURIComponent(seed)}`;
+
+			document.getElementById('generatedLink').value = url;
+			document.getElementById('generatedLink_try').href = url;
+			document.getElementById('result').style.display = '';
+		}
+
+		document.querySelectorAll('input').forEach(input => input.addEventListener('input', updateLink));
+		
+		const uuid = function b(a){return a?(a^Math.random()*16>>a/4).toString(16):([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,b)}
+
+		const randomSeed = () => {
+			document.getElementById('seed').value = Math.floor(Math.random()*9000000) + 1000000;
+			updateLink();
+		}
+		document.getElementById('seed_random').addEventListener('click', randomSeed);
+		randomSeed();
+
+		document.getElementById('generatedLink_copy').addEventListener('click', () => {
+			const elem = document.getElementById('generatedLink');
+			elem.select();
+			elem.setSelectionRange(0, 99999);
+			document.execCommand("copy");
+
+			document.getElementById('generatedLink_copy').innerText = '✔ Copied';
+			document.getElementById('generatedLink_copy').classList.remove('btn-outline-light');
+			document.getElementById('generatedLink_copy').classList.add('btn-success');
+			setTimeout(() => {
+				document.getElementById('generatedLink_copy').innerText = 'Copy';
+				document.getElementById('generatedLink_copy').classList.remove('btn-success');
+				document.getElementById('generatedLink_copy').classList.add('btn-outline-light');
+			}, 3000);
+		});
+	</script>
+</body>
+
+</html>

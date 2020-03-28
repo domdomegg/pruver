@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Pruver</title>
+	<meta name="author" content="Adam Jones (domdomegg)">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+	<style>
+		body {
+			background: #1F2228;
+			color: #EEF4ED;
+		}
+
+		.purple {
+			color: #F92672;
+			margin-left: 0.15rem;
+			font-size: 100%;
+		}
+
+		code {
+			font-size: 100%;
+		}
+
+		a {
+			color: #4dbdff
+		}
+
+		textarea {
+			word-break: break-all;
+			font-family: monospace;
+		}
+
+		input[readonly], textarea[readonly] {
+			border: none !important;
+			box-shadow: none !important;
+		}
+	</style>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53112287-3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'UA-53112287-3');
+	</script>
+</head>
+
+<body>
+	<!-- <p class="d-block px-3 py-2 text-center" style="background-color:#c24e00;">⚠ This service is in BETA and future breaking changes are likely</p> -->
+	<div class="container" id="topContent">
+		<div class="d-none d-sm-block" style="padding-top: 5rem;"></div>
+		<h1 class="pt-2">👋 Welcome to Pruver!</h1>
+		<h4 class="py-4 lead">Pruver certifies people's identities (e.g. they're a Warwick student), without revealing anything else.</h4>
+		
+		<nav class="py-2">
+			<ul class="list-inline">
+				<li class="list-inline-item">
+					<button type="button" class="btn btn-light">Home</button>
+				</li>
+				<li class="list-inline-item">
+					<a class="btn btn-outline-light" href="generate.html">Generate link</a>
+				</li>
+				<li class="list-inline-item">
+					<a class="btn btn-outline-light" href="verify.html">Verify code</a>
+				</li>
+			</ul>
+		</nav>
+
+		<section class="py-2">
+			<h4>Why?</h4>
+			<p>There are many use cases for Pruver. It was designed for solving problems with feedback surveys:</p>
+			<ul>
+				<li>We want people to be anonymous, so they can be entirely honest in their answers.</li>
+				<li>We want to be sure the same person can't submit multiple times.</li>
+				<li>We want to target a specific group (e.g. just 2nd year Warwick CS students).</li>
+			</ul>
+		</section>
+
+		<section class="py-2">
+			<h4>How do I use it?</h4>
+			<ol>
+				<li>You <a href="generate.html">generate a link</a>, and share it with people you want to verify</li>
+				<li>People visit the link and verify their identity (e.g. login to their Warwick account).</li>
+				<li>They give you the code, e.g. by copy-and-pasting it into a survey.</li>
+				<li>You can verify this code and extract the data from it</li>
+			</ol>
+		</section>
+
+		<section class="py-2">
+			<h4>How does this work?</h4>
+			<p>
+				Our system takes the user to the login page of the necessary provider (e.g. Warwick University).
+				When they login, they're taken back to Pruver which compiles the requested data and signs it.
+				Cryptographically signing the data uses clever mathematics to prevent anyone else forging a code.
+				It can also generate a <code>uniqueId</code> by scrambling the user's ID with a seed of your choice. This can be used to prevent duplicate submissions.
+			</p>
+			<p>Want more detail? See the technical explanation (and the code) <a href="https://github.com/domdomegg/pruver" target="_blank" rel="noopener">on GitHub</a>.</p>
+		</section>
+		<section class="py-2">
+			<h4>FAQs</h4>
+			<dl>
+				<dt>Why not use IP addresses?</dt>
+				<dd>Checking IP addresses doesn't work with students as they usually live with flatmates who we don't want to exclude, and it's easy to circumvent with a proxy or VPN. Also, doesn't certify submissions are from a particular group (e.g. CS students only).</dd>
+
+				<dt>What prevents someone with access to the code reusing it in the future?</dt>
+				<dd>Generated codes contain a <code>reference</code> and <code>seed</code> which Pruver will include in the signed body. This means you know the user specifically certified themselves for that reference and seed - we reccommend using a new reference for each survey.</dd>
+
+				<dt>I think I've found a security or privacy-related problem</dt>
+				<dd>Please <a href="https://domdomegg.github.io/">contact me</a> privately.</dd>
+
+				<dt>This is cool, can I contribute?</dt>
+				<dd>Yes! All the code is available <a href="https://github.com/domdomegg/pruver" target="_blank" rel="noopener">on GitHub</a> and pull requests are welcomed.</dd>
+			</dl>
+		</section>
+	</div>
+</body>
+
+</html>

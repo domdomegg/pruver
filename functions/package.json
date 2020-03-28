@@ -1,0 +1,17 @@
+{
+  "name": "pruver",
+  "scripts": {
+    "lint": "prettier --check . --no-config --single-quote --print-width 140",
+    "lint:fix": "prettier --write . --no-config --single-quote --print-width 140",
+    "predeploy:dev": "rm -rf config && cp -r ../config/shared/. config && cp -r ../config/dev/. config",
+    "deploy:dev": "serverless deploy --stage dev --verbose",
+    "predeploy:prod": "rm -rf config && cp -r ../config/shared/. config && cp -r ../config/prod/. config",
+    "deploy:prod": "serverless deploy --stage prod --verbose",
+    "teardown:dev": "serverless remove --stage dev --verbose",
+    "teardown:prod": "serverless remove --stage prod --verbose"
+  },
+  "dependencies": {
+    "jsrsasign": "^8.0.12",
+    "oauth": "^0.9.15"
+  }
+}

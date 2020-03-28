@@ -1,0 +1,13 @@
+{
+	"uniqueId": "Proof that someone is a unique person for a given reference.",
+	"student": "Whether someone is a student, \"true\" or \"false\".",
+	"staff": "Whether someone is a staff member, \"true\" or \"false\".",
+	"group": "Group, e.g. \"Undergraduate - full-time\".",
+	"dept": "Department, e.g. \"Computer Science\".",
+	"year": "Year of study, e.g. \"2\".",
+	"course": "Course code, e.g. \"UCSA-G503\".",
+	"id": "University ID, e.g. \"1802249\".",
+	"user": "Username (usually their ID prepended with a 'u'), e.g. \"u1802249\".",
+	"firstName": "First name, e.g. \"Adam\".",
+	"lastName": "Last name, e.g. \"Jones\"."
+}

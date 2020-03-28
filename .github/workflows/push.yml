@@ -1,0 +1,48 @@
+name: CI/CD
+
+on: push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+    - name: Checkout ${{ github.sha }}
+      uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install prettier
+      run: npm install -g prettier
+    - name: Install dependencies
+      run: npm ci
+      working-directory: functions
+    - name: Lint
+      run: npm run lint
+      working-directory: functions
+  
+  cd:
+    if: github.ref == 'refs/heads/master'
+    needs: ci
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+    - name: Checkout ${{ github.sha }}
+      uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install serverless
+      run: npm install -g serverless
+    - name: Install production dependencies
+      run: npm ci --production
+      working-directory: functions
+    - name: Deploy to dev environment
+      run: npm run deploy:dev
+      working-directory: functions

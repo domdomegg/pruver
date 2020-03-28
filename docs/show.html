@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Your Pruver Code</title>
+	<meta name="author" content="Adam Jones (domdomegg)">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha256-L/W5Wfqfa0sdBNIKN9cG6QA5F2qx4qICmU2VgLruv9Y=" crossorigin="anonymous" />
+	<style>
+		body {
+			background: #1F2228;
+			color: #EEF4ED;
+		}
+
+		.purple {
+			color: #F92672;
+			margin-left: 0.15rem;
+			font-size: 100%;
+		}
+
+		code {
+			font-size: 100%;
+		}
+
+		a {
+			color: #4dbdff
+		}
+
+		textarea {
+			word-break: break-all;
+			font-family: monospace;
+		}
+
+		input[readonly], textarea[readonly] {
+			border: none !important;
+			box-shadow: none !important;
+		}
+	</style>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-53112287-3"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'UA-53112287-3');
+	</script>
+</head>
+
+<body>
+	<!-- <p class="d-block px-3 py-2 text-center" style="background-color:#c24e00;">⚠ This service is in BETA and future breaking changes are likely</p> -->
+	<div class="container">
+		<div class="d-none d-sm-block" style="padding-top: 5rem;"></div>
+		<h1 class="pt-2">✅ Your <span class="d-none d-sm-inline">Pruver</span> code</h1>
+		<h4 id="reference" class="py-4 lead"></h4>
+
+		<section class="py-2">
+			<form class="pb-4">
+				<h4>👇 Here's your code:</h4>
+				<textarea id="enteredCode" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" class="form-control" rows="10" readonly></textarea>
+				<button id="enteredCode_copy" style="border-top-left-radius: 0; border-top-right-radius: 0;" class="btn btn-lg btn-block btn-outline-light" type="button">Copy</button>
+			</form>
+
+			<div id="result" style="display: none">
+				<h4 id="result_header">Hmm you shouldn't see this... like ever.</h4>
+				<textarea id="result_data" class="form-control" rows="12" readonly></textarea>
+				<small id="result_help" class="form-text"></small>
+			</div>
+		</section>
+
+		<section class="py-4">
+			<h4>🤔 Want to learn more?</h4>
+			<p>An explanation of what this does and how to use it yourself is available on the <a href="https://domdomegg.github.io/pruver/" target="_blank" rel="noopener">Pruver homepage</a>.</p>
+		</section>
+	</div>
+	<script type="text/javascript" src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
+	<script type="text/javascript">
+const verify = () => {
+	const jwt = document.getElementById('enteredCode').value.trim();
+	if (!jwt) {
+		document.getElementById('result').style.display = 'none';
+		return;
+	}
+
+	document.getElementById('result').style.display = '';
+
+	const { result, data } = parseJwt(jwt);
+
+	if (result == 'invalid') {
+		document.getElementById('result_header').innerText = '😕 That\'s not a valid code';
+		document.getElementById('result_data').style.display = 'none';
+		return;
+	}
+
+	if (result == 'tampered') {
+		document.getElementById('result_header').innerText = '🚨 That code\'s been tampered with';
+		document.getElementById('result_data').style.display = 'none';
+		return;
+	}
+
+	document.getElementById('result_header').innerText = '👀 Here\'s what anyone you give it to can see and verify:';
+	document.getElementById('result_data').style.display = '';
+	document.getElementById('result_data').value = JSON.stringify(data, null, 4);
+	document.getElementById('reference').innerText = `For reference '${data.reference}', with seed '${data.seed}'`;
+	
+	const messages = [];
+	if (data.uniqueId) messages.push('ℹ️ <code>uniqueId</code> identifies for the <code>seed</code>. Your Warwick ID or other details cannot be determined from it alone.')
+	if (data.id) messages.push('⚠ <code>id</code> identifies you.')
+	if (data.user) messages.push('⚠ <code>user</code> identifies you.')
+	if (data.firstName) messages.push('⚠ <code>firstName</code> may identify you.')
+	if (data.lastName) messages.push('⚠ <code>lastName</code> may identify you.')
+	document.getElementById('result_help').innerHTML = messages.join('<br/>');
+}
+
+const publicKey = KEYUTIL.getKey(`-----BEGIN PUBLIC KEY-----
+MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAudIZ1iexjR3IHnidTRkB
+MaVoGV3foD8d487hWq87E4oFGaAIVnhfoFIHuO2M7MLwWOir2ikNbTH/P0CWyxr2
+voJKwKJYC/CqB6r9N1iks0WtKbZkIwvhwIGUCNE/kl9wHUyqqw6aeOyBGVd65C40
+YCx1cxe6h4p/KVLeAztz32Oa/2wcMSG6Z5E1fOWrKtGmwFfmQJR7WIjHw75jui1F
+ZYrg5MbTdYg/nYLLjzq9n2DITI+TTqY/ICfhp3w+LnyerzOoF2u9pMjxAiTUPkST
+EZgCKKacUsy862gohKWjmztn7de3UocPJuN2fDlkXRmRKLlPCNwWHD/yBu43GhBL
+XVdha8LRdPOWmb44gFYdTQ/FERIq/J3gsnzGSlhnHtE4IddbuiH7z6xqz7+WijMn
+o6zX/lKtsvh/cBw+EHT0o0o5YpcdUpf54noMPodDcMn17UXzHUAHF4/Wov2I2vrI
+W/9XnElhzqgVXySon78H7wXCbof5VTZhMq7Mv05wrDVHZJx8R8ne0kSKtv7YAON3
+oe+5eCngjq/DAcRcxVjQn3f6ztrl3cZnfB3FT30L9qbKtDE64FUV0kD89MO+hRCH
+Rz2jOZnT24LeQKipsjR6Pbr5SzxOdeuO0kPal1nPBjFCKM5YIXncvwhE86mm58wY
+P1sFvOOWSdqtTWwhb6i2UeECAwEAAQ==
+-----END PUBLIC KEY-----`);
+
+/**
+ * @param {string} jwt
+ */
+const parseJwt = jwt => {
+	try {
+		const signatureLegit = KJUR.jws.JWS.verifyJWT(jwt, publicKey, { alg: ['RS512'] });
+		if (!signatureLegit) return { result: 'tampered' }
+	} catch (e) {
+		return { result: 'invalid' }
+	}
+
+	const data = JSON.parse(b64utoutf8(jwt.split('.')[1]));
+	return { result: 'valid', data }
+}
+
+document.getElementById('enteredCode').value = (new URLSearchParams(window.location.search)).get('jwt');
+verify();
+
+document.getElementById('enteredCode_copy').addEventListener('click', () => {
+	const elem = document.getElementById('enteredCode');
+	elem.select();
+	elem.setSelectionRange(0, 99999);
+	document.execCommand("copy");
+
+	document.getElementById('enteredCode_copy').innerText = '✔ Copied';
+	document.getElementById('enteredCode_copy').classList.remove('btn-outline-light');
+	document.getElementById('enteredCode_copy').classList.add('btn-success');
+	setTimeout(() => {
+		document.getElementById('enteredCode_copy').innerText = 'Copy';
+		document.getElementById('enteredCode_copy').classList.remove('btn-success');
+		document.getElementById('enteredCode_copy').classList.add('btn-outline-light');
+	}, 3000);
+});
+	</script>
+</body>
+
+</html>

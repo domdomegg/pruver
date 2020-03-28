@@ -1,0 +1,5 @@
+# Hide all the prod config
+/prod/*
+
+# Except public keys
+!*public.key

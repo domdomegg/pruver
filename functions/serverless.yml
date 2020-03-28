@@ -1,0 +1,25 @@
+service: pruver
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: eu-west-1
+  environment:
+    STAGE: ${self:provider.stage}
+    # prettier-ignore
+    BASE_URL: { "Fn::Join" : ["", [" https://", { "Ref" : "ApiGatewayRestApi" }, ".execute-api.${self:provider.region}.amazonaws.com/${self:provider.stage}" ] ]  }
+
+functions:
+  warwickSsoAuthorise:
+    handler: src/warwick-sso/authorise.handler
+    events:
+      - http:
+          path: /warwick-sso/authorise
+          method: get
+  warwickSsoCallback:
+    handler: src/warwick-sso/callback.handler
+    events:
+      - http:
+          path: /warwick-sso/callback
+          method: get
