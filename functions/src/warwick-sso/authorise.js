@@ -74,7 +74,9 @@ module.exports.handler = async (event) => {
     event.queryStringParameters.requested_properties
   )}&reference=${encodeURIComponent(event.queryStringParameters.reference)}&seed=${encodeURIComponent(
     event.queryStringParameters.seed
-  )}&oauth_token_secret=${encodeURIComponent(requestTokenSecret)}`;
+  )}&oauth_token_secret=${encodeURIComponent(requestTokenSecret)}${
+    event.queryStringParameters.pruver_redirect ? `&pruver_redirect=${encodeURIComponent(event.queryStringParameters.pruver_redirect)}` : ''
+  }`;
   return {
     statusCode: 302,
     headers: {

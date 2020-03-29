@@ -74,7 +74,11 @@ module.exports.handler = async (event) => {
   return {
     statusCode: 302,
     headers: {
-      Location: `http://domdomegg.github.io/pruver/show.html?jwt=${encodeURIComponent(jwt)}`,
+      Location: `http://domdomegg.github.io/pruver/show.html?jwt=${encodeURIComponent(jwt)}${
+        event.queryStringParameters.pruver_redirect
+          ? `&pruver_redirect=${encodeURIComponent(event.queryStringParameters.pruver_redirect)}`
+          : ''
+      }`,
     },
   };
 };

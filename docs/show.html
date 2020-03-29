@@ -57,7 +57,8 @@
 			<form class="pb-4">
 				<h4>👇 Here's your code:</h4>
 				<textarea id="enteredCode" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" class="form-control" rows="10" readonly></textarea>
-				<button id="enteredCode_copy" style="border-top-left-radius: 0; border-top-right-radius: 0;" class="btn btn-lg btn-block btn-outline-light" type="button">Copy</button>
+				<button id="enteredCode_copy" style="border-top-left-radius: 0; border-top-right-radius: 0;" class="btn btn-lg btn-block btn-primary" type="button">Copy</button>
+				<a href="" id="pruver_redirect" style="display: none; border-top-left-radius: 0; border-top-right-radius: 0; margin-top: 0;" class="btn btn-lg btn-block btn-primary">Continue to survey</a>
 			</form>
 
 			<div id="result" style="display: none">
@@ -141,7 +142,13 @@ const parseJwt = jwt => {
 	return { result: 'valid', data }
 }
 
-document.getElementById('enteredCode').value = (new URLSearchParams(window.location.search)).get('jwt');
+const queryParams = new URLSearchParams(window.location.search);
+document.getElementById('enteredCode').value = queryParams.get('jwt');
+if (queryParams.has('pruver_redirect')) {
+	document.getElementById('pruver_redirect').href = queryParams.get('pruver_redirect') + encodeURIComponent(queryParams.get('jwt'));
+	document.getElementById('enteredCode_copy').style.display = 'none';
+	document.getElementById('pruver_redirect').style.display = '';
+}
 verify();
 
 document.getElementById('enteredCode_copy').addEventListener('click', () => {
@@ -151,12 +158,12 @@ document.getElementById('enteredCode_copy').addEventListener('click', () => {
 	document.execCommand("copy");
 
 	document.getElementById('enteredCode_copy').innerText = '✔ Copied';
-	document.getElementById('enteredCode_copy').classList.remove('btn-outline-light');
+	document.getElementById('enteredCode_copy').classList.remove('btn-primary');
 	document.getElementById('enteredCode_copy').classList.add('btn-success');
 	setTimeout(() => {
 		document.getElementById('enteredCode_copy').innerText = 'Copy';
 		document.getElementById('enteredCode_copy').classList.remove('btn-success');
-		document.getElementById('enteredCode_copy').classList.add('btn-outline-light');
+		document.getElementById('enteredCode_copy').classList.add('btn-primary');
 	}, 3000);
 });
 	</script>
