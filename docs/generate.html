@@ -90,6 +90,14 @@
 					<small id="seedHelp" class="form-text">You'll need to remember this to verify codes later. If you don't know what value to put here, just leave the default. It prevents someone reusing someone else's code for a later survey with the same reference, and to detect duplicate responses. A different seed will result in a different <code>uniqueid</code> for the same user.</small>
 				</div>
 
+				<div class="form-group">
+					<label for="reference">Custom redirect prefix (optional)</label>
+					<div class="input-group">
+						<input type="text" class="form-control" id="pruverRedirect" aria-describedby="pruverRedirectHelp" placeholder="e.g. https://docs.google.com/forms/d/e/123456789abcde/viewform?entry.12345=">
+					</div>
+					<small id="pruverRedirectHelp" class="form-text">Custom redirect to suggest users go to, the code will be appended to this link. If using Google Forms you can get a link like this from the settings gear at the top right > 'Get pre-filled link', enter some data in the code box, get the link and delete the data you entered from the url (so it ends with '=').</small>
+				</div>
+
 				<!-- NB: you can generate these with tools/generatecheckboxes.js -->
 				<div id="requestedProperties">
 					<label>What data would you like to get?</label>
@@ -161,6 +169,7 @@
 		const updateLink = () => {
 			const reference = document.getElementById('reference').value;
 			const seed = document.getElementById('seed').value;
+			const pruverRedirect = document.getElementById('pruverRedirect').value;
 			const properties = [...document.querySelectorAll('input[type=checkbox]:checked')].map(input => input.id);
 
 			if (!reference || !seed || !properties.length) {
@@ -168,7 +177,7 @@
 				return;
 			}
 
-			const url = `${baseUrl}/warwick-sso/authorise?requested_properties=${encodeURIComponent(properties.join(','))}&reference=${encodeURIComponent(reference)}&seed=${encodeURIComponent(seed)}`;
+			const url = `${baseUrl}/warwick-sso/authorise?requested_properties=${encodeURIComponent(properties.join(','))}&reference=${encodeURIComponent(reference)}&seed=${encodeURIComponent(seed)}${pruverRedirect ? `&pruver_redirect=${encodeURIComponent(pruverRedirect)}` : ''}`;
 
 			document.getElementById('generatedLink').value = url;
 			document.getElementById('generatedLink_try').href = url;
