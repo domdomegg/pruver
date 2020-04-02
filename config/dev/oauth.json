@@ -1,6 +1,10 @@
 {
 	"warwickSso": {
 		"consumerKey": "domdomegg.github.io",
-		"consumerSecret": "this is not the real secret, no dev equivalent :("
+		"consumerSecret": "ZmdiZmRzYiBlciA3IDZyYjVsMmprNXRkZnM5c2o2dGZzZGIyNG8gcjczNHc=",
+		"requestTokenUrl": "https://websignon-test.warwick.ac.uk/oauth/requestToken",
+		"accessTokenUrl": "https://websignon-test.warwick.ac.uk/oauth/accessToken",
+		"authoriseUrl": "https://websignon-test.warwick.ac.uk/oauth/authorise",
+		"attributesUrl": "https://websignon-test.warwick.ac.uk/oauth/authenticate/attributes"
 	}
 }

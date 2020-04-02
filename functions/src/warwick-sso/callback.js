@@ -1,4 +1,5 @@
 const oauth = require('./oauth');
+const oauthConfig = require('../../config/oauth.json');
 
 const jsrsasign = require('jsrsasign');
 const jws = jsrsasign.KJUR.jws.JWS;
@@ -19,33 +20,26 @@ module.exports.handler = async (event) => {
   });
 
   const profile = await new Promise((resolve, reject) => {
-    oauth.post(
-      'https://websignon.warwick.ac.uk/oauth/authenticate/attributes',
-      accessToken,
-      accessTokenSecret,
-      null,
-      null,
-      (error, body, res) => {
-        if (error) {
-          console.log('Error fetching user profile', error);
-          reject(error);
-        }
-
-        const profile = {};
-        body
-          .split('\n')
-          .map((s) => s.trim())
-          .forEach((property) => {
-            if (property.includes('=')) {
-              const key = property.slice(0, property.indexOf('='));
-              const value = property.slice(property.indexOf('=') + 1);
-
-              profile[key] = value;
-            }
-          });
-        resolve(profile);
+    oauth.post(oauthConfig.warwickSso.attributesUrl, accessToken, accessTokenSecret, null, null, (error, body, res) => {
+      if (error) {
+        console.log('Error fetching user profile', error);
+        reject(error);
       }
-    );
+
+      const profile = {};
+      body
+        .split('\n')
+        .map((s) => s.trim())
+        .forEach((property) => {
+          if (property.includes('=')) {
+            const key = property.slice(0, property.indexOf('='));
+            const value = property.slice(property.indexOf('=') + 1);
+
+            profile[key] = value;
+          }
+        });
+      resolve(profile);
+    });
   });
 
   const allData = {

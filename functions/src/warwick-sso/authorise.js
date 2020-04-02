@@ -1,4 +1,5 @@
 const oauth = require('./oauth');
+const oauthConfig = require('../../config/oauth.json');
 const properties = require('../../config/properties.json');
 
 module.exports.handler = async (event) => {
@@ -80,9 +81,9 @@ module.exports.handler = async (event) => {
   return {
     statusCode: 302,
     headers: {
-      Location: `https://websignon.warwick.ac.uk/oauth/authorise?oauth_token=${encodeURIComponent(
-        requestToken
-      )}&oauth_callback=${encodeURIComponent(callbackUrl)}`,
+      Location: `${oauthConfig.warwickSso.authoriseUrl}?oauth_token=${encodeURIComponent(requestToken)}&oauth_callback=${encodeURIComponent(
+        callbackUrl
+      )}`,
     },
   };
 };
