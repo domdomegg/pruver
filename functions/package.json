@@ -11,7 +11,7 @@
     "teardown:prod": "serverless remove --stage prod --verbose"
   },
   "dependencies": {
-    "jsrsasign": "^8.0.12",
+    "jsrsasign": "^8.0.19",
     "oauth": "^0.9.15"
   }
 }
