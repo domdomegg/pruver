@@ -47,69 +47,79 @@
 </head>
 
 <body>
-	<!-- <p class="d-block px-3 py-2 text-center" style="background-color:#c24e00;">⚠ This service is in BETA and future breaking changes are likely</p> -->
 	<div class="container">
 		<div class="d-none d-sm-block" style="padding-top: 5rem;"></div>
-		<h1 class="pt-2">✅ Your <span class="d-none d-sm-inline">Pruver</span> code</h1>
-		<h4 id="reference" class="py-4 lead"></h4>
+		<h1 class="mt-2 mb-4">Your <span class="d-none d-sm-inline">Pruver</span> code</h1>
+		<h4 id="head_text" class="my-2" style="display: none"></h4>
 
-		<section class="py-2">
-			<form class="pb-4">
-				<h4>👇 Here's your code:</h4>
-				<textarea id="enteredCode" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" class="form-control" rows="10" readonly></textarea>
-				<button id="enteredCode_copy" style="border-top-left-radius: 0; border-top-right-radius: 0;" class="btn btn-lg btn-block btn-primary" type="button">Copy</button>
-				<a href="" id="pruver_redirect" style="display: none; border-top-left-radius: 0; border-top-right-radius: 0; margin-top: 0;" class="btn btn-lg btn-block btn-primary">Continue to survey</a>
-			</form>
+		<div id="details" class="my-4">
+			<h4>👇 You're sharing:</h4>
+			<textarea id="details_value" class="form-control" rows="8" readonly></textarea>
+			<a href="" id="btn_redirect" style="border-top-left-radius: 0; border-top-right-radius: 0; margin-top: 0;" class="btn btn-lg btn-block btn-primary">Continue to survey</a>
+			<small id="details_help" class="form-text"></small>
+		</div>
 
-			<div id="result" style="display: none">
-				<h4 id="result_header">Hmm you shouldn't see this... like ever.</h4>
-				<textarea id="result_data" class="form-control" rows="12" readonly></textarea>
-				<small id="result_help" class="form-text"></small>
+		<div id="code" class="my-4" style="display: none">
+			<h4 id="code_header">🔤 Your code is:</h4>
+			<textarea id="code_value" class="form-control" rows="8" readonly></textarea>
+			<button id="btn_copy" style="border-top-left-radius: 0; border-top-right-radius: 0;" class="btn btn-lg btn-block btn-primary" type="button">Copy code to clipboard</button>
+		</div>
+
+		<section id="more_details" class="my-4">
+			<h6 id="more_details_head" style="cursor: pointer">▸ More details</h6>
+			<div id="more_details_body" style="display: none">
+				<p>An explanation of what this tool does and how to use it yourself is available on the <a href="https://domdomegg.github.io/pruver/" target="_blank" rel="noopener">Pruver homepage</a>.</p>
+	
+				<div id="more_details_code" class="my-4" style="display: none">
+					<h6 id="more_details_code_header">🔤 Your code is:</h6>
+					<textarea id="more_details_code_value" class="form-control" rows="8" readonly></textarea>
+				</div>
 			</div>
-		</section>
-
-		<section class="py-4">
-			<h4>🤔 Want to learn more?</h4>
-			<p>An explanation of what this does and how to use it yourself is available on the <a href="https://domdomegg.github.io/pruver/" target="_blank" rel="noopener">Pruver homepage</a>.</p>
 		</section>
 	</div>
 	<script type="text/javascript" src="https://kjur.github.io/jsrsasign/jsrsasign-latest-all-min.js"></script>
 	<script type="text/javascript">
 const verify = () => {
-	const jwt = document.getElementById('enteredCode').value.trim();
+	const jwt = document.getElementById('code_value').value.trim();
 	if (!jwt) {
-		document.getElementById('result').style.display = 'none';
+		document.getElementById('details').style.display = 'none';
+		document.getElementById('code').style.display = 'none';
+		document.getElementById('head_text').style.display = '';
+		document.getElementById('head_text').textContent = '😕 Your code was missing';
 		return;
 	}
 
-	document.getElementById('result').style.display = '';
+	if (queryParams.has('pruver_redirect')) {
+		document.getElementById('more_details_code').style.display = '';
+	} else {
+		document.getElementById('code').style.display = '';
+	}
 
 	const { result, data } = parseJwt(jwt);
 
 	if (result == 'invalid') {
-		document.getElementById('result_header').innerText = '😕 That\'s not a valid code';
-		document.getElementById('result_data').style.display = 'none';
+		document.getElementById('head_text').style.display = '';
+		document.getElementById('head_text').textContent = '😕 Your code was invalid';
+		document.getElementById('details').style.display = 'none';
 		return;
 	}
 
 	if (result == 'tampered') {
-		document.getElementById('result_header').innerText = '🚨 That code\'s been tampered with';
-		document.getElementById('result_data').style.display = 'none';
+		document.getElementById('head_text').style.display = '';
+		document.getElementById('head_text').textContent = '🚨 Your code has been tampered with';
+		document.getElementById('details').style.display = 'none';
 		return;
 	}
 
-	document.getElementById('result_header').innerText = '👀 Here\'s what anyone you give it to can see and verify:';
-	document.getElementById('result_data').style.display = '';
-	document.getElementById('result_data').value = JSON.stringify(data, null, 4);
-	document.getElementById('reference').innerText = `For reference '${data.reference}', with seed '${data.seed}'`;
+	document.getElementById('details_value').value = JSON.stringify(data, null, 4);
 	
 	const messages = [];
-	if (data.uniqueId) messages.push('ℹ️ <code>uniqueId</code> identifies for the <code>seed</code>. Your Warwick ID or other details cannot be determined from it alone.')
+	if (data.uniqueId) messages.push('ℹ️ <code>uniqueId</code> identifies you for the <code>seed</code>. Your Warwick ID or other details cannot be determined from it alone.')
 	if (data.id) messages.push('⚠ <code>id</code> identifies you.')
 	if (data.user) messages.push('⚠ <code>user</code> identifies you.')
 	if (data.firstName) messages.push('⚠ <code>firstName</code> may identify you.')
 	if (data.lastName) messages.push('⚠ <code>lastName</code> may identify you.')
-	document.getElementById('result_help').innerHTML = messages.join('<br/>');
+	document.getElementById('details_help').innerHTML = messages.join('<br/>');
 }
 
 const publicKey = KEYUTIL.getKey(`-----BEGIN PUBLIC KEY-----
@@ -143,29 +153,49 @@ const parseJwt = jwt => {
 }
 
 const queryParams = new URLSearchParams(window.location.search);
-document.getElementById('enteredCode').value = queryParams.get('jwt');
+document.getElementById('code_value').value = queryParams.get('jwt');
+document.getElementById('more_details_code_value').value = queryParams.get('jwt');
 if (queryParams.has('pruver_redirect')) {
-	document.getElementById('pruver_redirect').href = queryParams.get('pruver_redirect') + encodeURIComponent(queryParams.get('jwt'));
-	document.getElementById('enteredCode_copy').style.display = 'none';
-	document.getElementById('pruver_redirect').style.display = '';
+	document.getElementById('btn_redirect').href = queryParams.get('pruver_redirect') + encodeURIComponent(queryParams.get('jwt'));
+	document.getElementById('details_value').style.borderBottomLeftRadius = 0;
+	document.getElementById('details_value').style.borderBottomRightRadius = 0;
+	document.getElementById('btn_copy').style.display = 'none';
+	document.getElementById('btn_redirect').style.display = '';
+} else {
+	document.getElementById('code_value').style.borderBottomLeftRadius = 0;
+	document.getElementById('code_value').style.borderBottomRightRadius = 0;
+	document.getElementById('btn_copy').style.display = '';
+	document.getElementById('btn_redirect').style.display = 'none';
 }
 verify();
 
-document.getElementById('enteredCode_copy').addEventListener('click', () => {
-	const elem = document.getElementById('enteredCode');
+document.getElementById('btn_copy').addEventListener('click', () => {
+	const elem = document.getElementById('code_value');
 	elem.select();
 	elem.setSelectionRange(0, 99999);
 	document.execCommand("copy");
 
-	document.getElementById('enteredCode_copy').innerText = '✔ Copied';
-	document.getElementById('enteredCode_copy').classList.remove('btn-primary');
-	document.getElementById('enteredCode_copy').classList.add('btn-success');
+	document.getElementById('btn_copy').innerText = '✔ Copied';
+	document.getElementById('btn_copy').classList.remove('btn-primary');
+	document.getElementById('btn_copy').classList.add('btn-success');
 	setTimeout(() => {
-		document.getElementById('enteredCode_copy').innerText = 'Copy';
-		document.getElementById('enteredCode_copy').classList.remove('btn-success');
-		document.getElementById('enteredCode_copy').classList.add('btn-primary');
+		document.getElementById('btn_copy').innerText = 'Copy code to clipboard';
+		document.getElementById('btn_copy').classList.remove('btn-success');
+		document.getElementById('btn_copy').classList.add('btn-primary');
 	}, 3000);
 });
+
+let moreDetailsOpen = false;
+document.getElementById('more_details_head').addEventListener('click', () => {
+	moreDetailsOpen = !moreDetailsOpen;
+	if (moreDetailsOpen) {
+		document.getElementById('more_details_head').textContent = '▾ More details';
+		document.getElementById('more_details_body').style.display = '';
+	} else {
+		document.getElementById('more_details_head').textContent = '▸ More details';
+		document.getElementById('more_details_body').style.display = 'none';
+	}
+})
 	</script>
 </body>
 
