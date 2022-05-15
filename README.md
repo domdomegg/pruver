@@ -61,9 +61,8 @@ Every commit to master will kick off a CI build. If the tests are successful a C
 #### 👷 Manual (dev and prod)
 
 1. Ensure your local copy is what you want deployed (for prod, this should be a version that's been tested in dev)
-2. Run `npm ci --production` to install just the non-development dependencies
-3. Ensure Serverless is installed globally with `npm install --global serverless`
-4. Run `npm run deploy:dev` or `npm run deploy:prod` to deploy the app to the respective environment
+2. Run `npm i` to install dependencies
+3. Run `npm run deploy:dev` or `npm run deploy:prod` to deploy the app to the respective environment
 
 ### 📈 Monitoring
 

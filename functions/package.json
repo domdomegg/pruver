@@ -13,5 +13,8 @@
   "dependencies": {
     "jsrsasign": "^10.2.0",
     "oauth": "^0.9.15"
+  },
+  "devDependencies": {
+    "serverless": "^3.17.0"
   }
 }
