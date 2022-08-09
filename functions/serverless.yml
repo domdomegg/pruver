@@ -2,7 +2,7 @@ service: pruver
 
 provider:
   name: aws
-  runtime: nodejs14.x
+  runtime: nodejs16.x
   stage: prod
   region: eu-west-1
   environment:
