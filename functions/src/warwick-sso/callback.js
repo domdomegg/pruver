@@ -50,8 +50,8 @@ module.exports.handler = async (event) => {
     dept: profile.dept, // e.g. "Computer Science"
     year: profile.yearofstudy, // e.g. "2"
     course: profile.warwickcoursecode, // e.g. "UCSA-G503"
-    id: profile.id, // e.g. "1802249"
-    user: profile.user, // e.g. "u1802249"
+    id: profile.id, // e.g. "1234567"
+    user: profile.user, // e.g. "u1234567"
     firstName: profile.firstname, // e.g. "Adam"
     lastName: profile.lastname, // e.g. "Jones"
   };
