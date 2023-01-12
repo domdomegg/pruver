@@ -6,8 +6,8 @@
 	"dept": "Department, e.g. \"Computer Science\".",
 	"year": "Year of study, e.g. \"2\".",
 	"course": "Course code, e.g. \"UCSA-G503\".",
-	"id": "University ID, e.g. \"1802249\".",
-	"user": "Username (usually their ID prepended with a 'u'), e.g. \"u1802249\".",
+	"id": "University ID, e.g. \"1234567\".",
+	"user": "Username (usually their ID prepended with a 'u'), e.g. \"u1234567\".",
 	"firstName": "First name, e.g. \"Adam\".",
 	"lastName": "Last name, e.g. \"Jones\"."
 }
