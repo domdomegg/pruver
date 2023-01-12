@@ -2,7 +2,7 @@
 
 Pruver certifies people's identities (e.g. they're a Warwick student), without revealing anything else.
 
-See [the website](https://domdomegg.github.io/pruver/) for more details.
+See [the website](https://adamjones.me/pruver/) for more details.
 
 ## 🤔 Technical explanation
 
@@ -35,7 +35,7 @@ The purpose of `uniqueid_private.key` is to prevent brute force/lookup table att
 
 Contributions (in the form of issues or pull requests) are welcomed.
 
-If it's security or privacy related, please instead [contact me privately](https://domdomegg.github.io/).
+If it's security or privacy related, please instead contact me privately.
 
 ### 🔧 Setup
 
