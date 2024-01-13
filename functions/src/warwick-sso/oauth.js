@@ -8,7 +8,7 @@ const oauth = new Oauth.OAuth(
   oauthConfig.warwickSso.consumerSecret,
   '1.0',
   null,
-  'HMAC-SHA1'
+  'HMAC-SHA1',
 );
 
 module.exports = oauth;
