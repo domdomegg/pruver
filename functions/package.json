@@ -15,6 +15,7 @@
     "oauth": "^0.9.15"
   },
   "devDependencies": {
+    "prettier": "^3.2.1",
     "serverless": "^3.17.0"
   }
 }

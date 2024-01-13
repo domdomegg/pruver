@@ -72,9 +72,9 @@ module.exports.handler = async (event) => {
   });
 
   const callbackUrl = `${process.env.BASE_URL}/warwick-sso/callback?requested_properties=${encodeURIComponent(
-    event.queryStringParameters.requested_properties
+    event.queryStringParameters.requested_properties,
   )}&reference=${encodeURIComponent(event.queryStringParameters.reference)}&seed=${encodeURIComponent(
-    event.queryStringParameters.seed
+    event.queryStringParameters.seed,
   )}&oauth_token_secret=${encodeURIComponent(requestTokenSecret)}${
     event.queryStringParameters.pruver_redirect ? `&pruver_redirect=${encodeURIComponent(event.queryStringParameters.pruver_redirect)}` : ''
   }`;
@@ -82,7 +82,7 @@ module.exports.handler = async (event) => {
     statusCode: 302,
     headers: {
       Location: `${oauthConfig.warwickSso.authoriseUrl}?oauth_token=${encodeURIComponent(requestToken)}&oauth_callback=${encodeURIComponent(
-        callbackUrl
+        callbackUrl,
       )}`,
     },
   };
