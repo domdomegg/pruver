@@ -16,6 +16,6 @@
   },
   "devDependencies": {
     "prettier": "^3.2.1",
-    "serverless": "^3.17.0"
+    "serverless": "^4.31.0"
   }
 }
