@@ -1,5 +1,8 @@
 # ✒ Pruver
 
+> [!WARNING]
+> **Archived -- no longer maintained.**
+
 Pruver certifies people's identities (e.g. they're a Warwick student), without revealing anything else.
 
 See [the website](https://adamjones.me/pruver/) for more details.
