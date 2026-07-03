@@ -8,14 +8,17 @@
     "predeploy:prod": "rm -rf config && cp -r ../config/shared/. config && cp -r ../config/prod/. config",
     "deploy:prod": "serverless deploy --stage prod --verbose",
     "teardown:dev": "serverless remove --stage dev --verbose",
-    "teardown:prod": "serverless remove --stage prod --verbose"
+    "teardown:prod": "serverless remove --stage prod --verbose",
+    "test": "vitest run",
+    "pretest": "rm -rf config && cp -r ../config/shared/. config && cp -r ../config/dev/. config"
   },
   "dependencies": {
     "jsrsasign": "^11.0.0",
     "oauth": "^0.9.15"
   },
   "devDependencies": {
+    "osls": "^3.76.1",
     "prettier": "^3.2.1",
-    "serverless": "^4.31.0"
+    "vitest": "^4.1.8"
   }
 }

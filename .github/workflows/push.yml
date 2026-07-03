@@ -2,44 +2,62 @@ name: CI/CD
 
 on: push
 
+permissions:
+  contents: read
+
 jobs:
   ci:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: functions
     env:
       CI: true
     steps:
       - name: Checkout ${{ github.sha }}
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 24
       - name: Install dependencies
         run: npm ci
-        working-directory: functions
       - name: Lint
         run: npm run lint
-        working-directory: functions
+      - name: Test
+        run: npm test
 
   cd:
     if: github.ref == 'refs/heads/master'
     needs: ci
     runs-on: ubuntu-latest
+    # Only the deploy job may mint OIDC tokens (the role trust is also pinned
+    # to this repo's master ref in aws-shared-infra)
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: deploy-dev
+      cancel-in-progress: false
+    defaults:
+      run:
+        working-directory: functions
     env:
       CI: true
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Checkout ${{ github.sha }}
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 24
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::338337944728:role/pruver-ci
+          aws-region: eu-west-1
       - name: Install dependencies
         run: npm ci
-        working-directory: functions
       - name: Deploy to dev environment
         run: npm run deploy:dev
-        working-directory: functions
