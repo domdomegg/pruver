@@ -13,7 +13,7 @@
     "pretest": "rm -rf config && cp -r ../config/shared/. config && cp -r ../config/dev/. config"
   },
   "dependencies": {
-    "jsrsasign": "^11.0.0",
+    "jsrsasign": "^11.1.1",
     "oauth": "^0.9.15"
   },
   "devDependencies": {
