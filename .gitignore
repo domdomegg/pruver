@@ -1,0 +1,4 @@
+
+# Prod private keys live only on deploy machines, never in this (public!) repo
+config/prod/*_private.key
+config/prod/oauth.json
