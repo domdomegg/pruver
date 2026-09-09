@@ -19,6 +19,6 @@
   "devDependencies": {
     "osls": "^4.0.0",
     "prettier": "^3.2.1",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.11"
   }
 }
